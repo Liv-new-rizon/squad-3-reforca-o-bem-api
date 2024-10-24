@@ -2,50 +2,61 @@ import { Request, Response } from 'express';
 import { AlunoRepository } from '../repositories/AlunoRepository';
 import { UserRepository } from '../repositories/UserRepository';
 
+/**
+ * Controlador para as operações relacionadas aos alunos.
+ */
 export class AlunoController {
-    async createAluno(req: Request, res: Response): Promise<Response> {
-        const {
-            userId,
-            dataNascimento,
-            escolaridade,
-            tipoEscola,
-            materiasInteresse,
-            numeroCelular
-        } = req.body;
+  private alunoRepository: AlunoRepository;
 
-        try {
-            // Verificar se o usuário existe
-            console.log(`Verificando se o usuário com ID ${userId} existe.`);
-            const user = await new UserRepository().findOne(userId);
-            if (!user) {
-                return res
-                    .status(404)
-                    .json({ message: 'Usuário não encontrado' });
-            }
+  constructor() {
+    this.alunoRepository = new AlunoRepository();
+  }
 
-            // Criar e salvar o novo aluno
-            const newAluno = AlunoRepository.create({
-                userId,
-                dataNascimento: new Date(dataNascimento),
-                escolaridade,
-                tipoEscola,
-                materiasInteresse,
-                numeroCelular
-            });
+  /**
+   * Cria um novo aluno associado a um usuário existente.
+   *
+   * @param req - Requisição HTTP contendo os dados do aluno.
+   * @param res - Resposta HTTP.
+   * @returns Resposta HTTP com o aluno criado ou erro.
+   */
+  async createAluno(req: Request, res: Response): Promise<Response> {
+    const {
+      userId,
+      dataNascimento,
+      escolaridade,
+      tipoEscola,
+      materiasInteresse,
+      numeroCelular,
+    } = req.body;
 
-            console.log('Salvando o novo aluno no banco de dados.');
-            await AlunoRepository.save(newAluno);
+    try {
+      // Verificar se o usuário existe usando o ID do usuário (userId)
+      const user = await new UserRepository().findOne(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
 
-            return res.status(201).json({
-                message: 'Aluno cadastrado com sucesso',
-                aluno: newAluno
-            });
-        } catch (error) {
-            console.error('Erro ao cadastrar aluno:', error); // Log detalhado do erro
-            return res.status(500).json({
-                message: 'Erro ao cadastrar aluno',
-                error: error.message
-            });
-        }
+      // Criar e salvar o novo aluno vinculado ao userId
+      const newAluno = this.alunoRepository.create({
+        userId, // ID de referência do usuário
+        dataNascimento: new Date(dataNascimento),
+        escolaridade,
+        tipoEscola,
+        materiasInteresse,
+        numeroCelular,
+      });
+
+      await this.alunoRepository.save(newAluno);
+
+      return res.status(201).json({
+        message: 'Aluno cadastrado com sucesso',
+        aluno: newAluno,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Erro ao cadastrar aluno',
+        error: error.message,
+      });
     }
+  }
 }

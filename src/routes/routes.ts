@@ -83,6 +83,13 @@ router.post('/api/auth/login', authController.login.bind(authController));
 
 /**
  * @swagger
+ * tags:
+ *   name: Alunos
+ *   description: API para gestão de alunos
+ */
+
+/**
+ * @swagger
  * /api/alunos:
  *   post:
  *     summary: Cadastrar um novo aluno
@@ -124,6 +131,6 @@ router.post('/api/auth/login', authController.login.bind(authController));
  *       500:
  *         description: Erro ao cadastrar aluno
  */
-router.post('/api/alunos', (req, res) => alunoController.createAluno(req, res));
+router.post('/api/alunos', alunoController.createAluno.bind(alunoController));
 
 export default router;
