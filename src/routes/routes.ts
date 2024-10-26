@@ -1,14 +1,13 @@
 import { Router } from 'express';
-
 import { UserController } from '../controller/UserController';
 import { AuthController } from '../controller/AuthController';
-import { AlunoController } from '../controller/AlunoController';
+import { StudentController } from '../controller/StudentController';
 
 const router = Router();
 
 const userController = new UserController();
 const authController = new AuthController();
-const alunoController = new AlunoController();
+const studentController = new StudentController();
 
 /**
  * @swagger
@@ -84,45 +83,22 @@ router.post('/api/auth/login', authController.login.bind(authController));
 /**
  * @swagger
  * tags:
- *   name: Alunos
+ *   name: Students
  *   description: API para gestão de alunos
  */
 
 /**
  * @swagger
- * /api/alunos:
+ * /api/students:
  *   post:
  *     summary: Cadastrar um novo aluno
- *     tags: [Alunos]
+ *     tags: [Students]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - userId
- *               - dataNascimento
- *               - escolaridade
- *               - tipoEscola
- *               - materiasInteresse
- *               - numeroCelular
- *             properties:
- *               userId:
- *                 type: string
- *               dataNascimento:
- *                 type: string
- *                 format: date
- *               escolaridade:
- *                 type: string
- *               tipoEscola:
- *                 type: string
- *               materiasInteresse:
- *                 type: array
- *                 items:
- *                   type: string
- *               numeroCelular:
- *                 type: string
+ *             $ref: '#/components/schemas/Student'
  *     responses:
  *       201:
  *         description: Aluno cadastrado com sucesso
@@ -131,6 +107,9 @@ router.post('/api/auth/login', authController.login.bind(authController));
  *       500:
  *         description: Erro ao cadastrar aluno
  */
-router.post('/api/alunos', alunoController.createAluno.bind(alunoController));
+router.post(
+  '/api/students',
+  studentController.createStudent.bind(studentController),
+);
 
 export default router;
