@@ -1,5 +1,5 @@
 import { MongoRepository } from 'typeorm';
-import { User } from '../models/Users';
+import { User } from '../models';
 import { MongoDataSource } from '../config/database';
 
 /**
