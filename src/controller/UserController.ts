@@ -25,17 +25,17 @@ export class UserController {
         const { name, email, password, confirmPassword } = req.body;
 
         try {
-            // Validação de senhas correspondentes
-            if (password !== confirmPassword) {
-                throw new CustomError('As senhas não coincidem', 400);
-            }
-
             // Validação do tamanho da senha
             if (password.length < 8) {
                 throw new CustomError(
                     'A senha deve conter pelo menos 8 caracteres',
                     400
                 );
+            }
+
+            // Validação de senhas correspondentes
+            if (password !== confirmPassword) {
+                throw new CustomError('As senhas não coincidem', 400);
             }
 
             // Validação do email
@@ -47,13 +47,14 @@ export class UserController {
             // Cria o hash da senha
             const hashedPassword = await hashPassword(password);
 
-            // Cria o novo usuário e salva no banco de dados
+            // Cria o novo usuário
             const newUser = this.userRepository.create({
                 name,
                 email,
                 password: hashedPassword
             });
 
+            // Salva o novo usuário no banco de dados
             await this.userRepository.save(newUser);
 
             // Retorna uma resposta de sucesso
