@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
-import { User } from '../models/Users';
-import { Student } from '../models/profile/Profiles';
+import { User, Profile } from '../models';
 
 dotenv.config();
 
@@ -14,7 +13,7 @@ export const MongoDataSource = new DataSource({
     database: process.env.DB_DATABASE || 'reforca',
     synchronize: false,
     logging: true,
-    entities: [User, Student]
+    entities: [User, Profile]
 });
 
 /**

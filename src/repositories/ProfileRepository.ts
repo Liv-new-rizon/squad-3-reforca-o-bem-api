@@ -1,35 +1,35 @@
 import { MongoRepository } from 'typeorm';
-import { Student } from '../models/profile/Profiles';
+import { Profile } from '../models';
 import { MongoDataSource } from '../config/database';
 
 /**
- * Repositório da entidade Student para encapsular o acesso aos dados.
+ * Repositório da entidade Profile para encapsular o acesso aos dados.
  */
-export class StudentRepository {
-    private repository: MongoRepository<Student>;
+export class ProfileRepository {
+    private repository: MongoRepository<Profile>;
 
     constructor() {
-        this.repository = MongoDataSource.getMongoRepository(Student);
+        this.repository = MongoDataSource.getMongoRepository(Profile);
     }
 
     /**
-     * Cria uma instância de Student sem salvar no banco.
+     * Cria uma instância de Profile sem salvar no banco.
      *
-     * @param studentData - Os dados do aluno.
+     * @param ProfileData - Os dados do aluno.
      * @returns A instância do aluno criada.
      */
-    create(studentData: Partial<Student>): Student {
-        return this.repository.create(studentData);
+    create(profileData: Partial<Profile>): Profile {
+        return this.repository.create(profileData);
     }
 
     /**
      * Salva um novo aluno no banco de dados.
      *
-     * @param student - O aluno a ser salvo.
+     * @param profile - O aluno a ser salvo.
      * @returns O aluno salvo.
      */
-    async save(student: Student): Promise<Student> {
-        return this.repository.save(student);
+    async save(profile: Profile): Promise<Profile> {
+        return this.repository.save(profile);
     }
 
     /**
@@ -38,7 +38,7 @@ export class StudentRepository {
      * @param userId - O ID do usuário associado ao aluno.
      * @returns Uma Promise que resolve no aluno encontrado ou undefined.
      */
-    async findByUserId(userId: string): Promise<Student | undefined> {
+    async findByUserId(userId: string): Promise<Profile | undefined> {
         return this.repository.findOne({ where: { userId } });
     }
 }
