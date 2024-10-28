@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { StudentRepository } from '../repositories/ProfileRepository';
+import { ProfileRepository } from '../repositories/ProfileRepository';
 import { UserRepository } from '../repositories/UserRepository';
 
 /**
  * Controlador para as operações relacionadas aos alunos.
  */
-export class StudentController {
-  private studentRepository: StudentRepository;
+export class ProfileController {
+  private ProfileRepository: ProfileRepository;
 
   constructor() {
-    this.studentRepository = new StudentRepository();
+    this.ProfileRepository = new ProfileRepository();
   }
 
   /**
@@ -53,7 +53,7 @@ export class StudentController {
    * @param res - Resposta HTTP.
    * @returns Resposta HTTP com o aluno criado ou erro.
    */
-  async createStudent(req: Request, res: Response): Promise<Response> {
+  async createProfile(req: Request, res: Response): Promise<Response> {
     const {
       userId,
       birthDate,
@@ -133,7 +133,7 @@ export class StudentController {
       }
 
       // Criar e salvar o novo aluno vinculado ao userId
-      const newStudent = this.studentRepository.create({
+      const newProfile = this.ProfileRepository.create({
         userId,
         birthDate: new Date(birthDate.split('/').reverse().join('-')), // Converter para formato Date
         educationLevel,
@@ -142,11 +142,11 @@ export class StudentController {
         phoneNumber: formattedPhone,
       });
 
-      await this.studentRepository.save(newStudent);
+      await this.ProfileRepository.save(newProfile);
 
       return res.status(201).json({
         message: 'Aluno cadastrado com sucesso',
-        student: newStudent,
+        Profile: newProfile,
       });
     } catch (error) {
       return res.status(500).json({
