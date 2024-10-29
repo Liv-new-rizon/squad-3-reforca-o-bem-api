@@ -36,20 +36,7 @@ services:
     networks:
       - reforca-connect
 
-  reforca-mysql:
-    container_name: reforca-mysql
-    image: mysql
-    environment:
-      MYSQL_USER: reforca_root
-      MYSQL_PASSWORD: j5m966qp7jiypfda
-      MYSQL_ROOT_PASSWORD: m45ug42qkr5pdzbb
-      MYSQL_DATABASE: reforca
-    ports:
-      - 3306:3306
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - reforca-connect
+
 
 # Definição da rede que será compartilhada pelos serviços
 networks:
@@ -58,4 +45,4 @@ networks:
 
 volumes:
   mongo-data:
-  mysql-data:
+  
