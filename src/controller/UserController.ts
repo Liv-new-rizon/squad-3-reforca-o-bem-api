@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UserRepository } from '../repositories/UserRepository';
 import { hashPassword } from '../library/bcrypt';
 import { CustomError } from '../interfaces/CustomError';
-import { JwtPayloadCustom } from 'interfaces/JwtPayloadCustom';
+import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
 
 /**
  * Controlador para operações relacionadas aos usuários.
@@ -28,7 +28,7 @@ export class UserController {
      * @param res - Objeto de resposta HTTP do Express.
      * @returns Uma resposta HTTP com status 201 e os dados do usuário criado, ou um erro.
      */
-    async createUser(req: Request, res: Response): Promise<Response> {
+    public async createUser(req: Request, res: Response): Promise<Response> {
         const { name, email, password, confirmPassword } = req.body;
 
         try {
@@ -82,7 +82,7 @@ export class UserController {
      * @param res - Objeto de resposta HTTP do Express.
      * @returns Uma resposta HTTP com os dados do usuário logado ou uma mensagem de erro.
      */
-    async getLoggedUser(req: Request, res: Response): Promise<Response> {
+    public async getLoggedUser(req: Request, res: Response): Promise<Response> {
         const userId = (req.user as JwtPayloadCustom).userId;
         const user = await this.userRepository.findByUserId(userId);
 
