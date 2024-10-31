@@ -34,7 +34,6 @@ export const authMiddleware = (
             token,
             process.env.JWT_SECRET!
         ) as JwtPayloadCustom;
-        console.log('Decoded token payload:', decoded);
         req.user = decoded;
         next();
     } catch (error) {

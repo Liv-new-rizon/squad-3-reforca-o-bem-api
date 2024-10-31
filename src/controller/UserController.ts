@@ -83,24 +83,12 @@ export class UserController {
      * @returns Uma resposta HTTP com os dados do usuário logado ou uma mensagem de erro.
      */
     async getLoggedUser(req: Request, res: Response): Promise<Response> {
-        try {
-            const userId = (req.user as JwtPayloadCustom).userId;
-            console.log('Fetching user with ID:', userId);
-            const user = await this.userRepository.findByUserId(userId);
+        const userId = (req.user as JwtPayloadCustom).userId;
+        const user = await this.userRepository.findByUserId(userId);
 
-            if (!user) {
-                throw new CustomError('Usuário não encontrado', 404);
-            }
-
-            return res.status(200).json({
-                message: 'Dados do usuário logado',
-                user: { id: user.id, name: user.name, email: user.email }
-            });
-        } catch (error) {
-            console.error('Erro no método getLoggedUser:', error);
-            return res
-                .status(500)
-                .json({ message: 'Erro ao buscar dados do usuário' });
-        }
+        return res.status(200).json({
+            message: 'Dados do usuário logado',
+            user: { id: user.id, name: user.name, email: user.email }
+        });
     }
 }
