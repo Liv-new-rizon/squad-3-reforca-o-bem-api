@@ -9,37 +9,22 @@ export class UserRepository {
   private repository: MongoRepository<User>;
 
   constructor() {
-    // Inicializa o repositório do TypeORM
     this.repository = MongoDataSource.getMongoRepository(User);
   }
 
-  /**
-   * Encontra um usuário pelo e-mail.
-   *
-   * @param email - O e-mail do usuário.
-   * @returns Uma Promise que resolve no usuário encontrado ou undefined.
-   */
-  async findByEmail(email: string): Promise<User | undefined> {
+  public async findByEmail(email: string): Promise<User | undefined> {
     return this.repository.findOne({ where: { email } });
   }
 
-  /**
-   * Salva um novo usuário no banco de dados.
-   *
-   * @param user - O usuário a ser salvo.
-   * @returns O usuário salvo.
-   */
-  async save(user: User): Promise<User> {
+  public async findById(id: string): Promise<User | undefined> {
+    return this.repository.findOne({ where: { id } });
+  }
+
+  public async save(user: User): Promise<User> {
     return this.repository.save(user);
   }
 
-  /**
-   * Cria uma instância de usuário sem salvar no banco.
-   *
-   * @param userData - Os dados do usuário.
-   * @returns A instância do usuário criada.
-   */
-  create(userData: Partial<User>): User {
+  public async create(userData: Partial<User>): Promise<User> {
     return this.repository.create(userData);
   }
 }

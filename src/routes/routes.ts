@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import { UserController } from '../controller/UserController';
 import { AuthController } from '../controller/AuthController';
-import { StudentController } from '../controller/ProfileController';
+import { ProfileController } from '../controller/ProfileController';
+import { ProfileValidator } from '../validator/ProfileValidator';
+import { authenticateToken } from '../middleware/AuthMiddleware';
 
 const router = Router();
 
 const userController = new UserController();
 const authController = new AuthController();
-const studentController = new StudentController();
+const profileController = new ProfileController();
+const profileValidator = new ProfileValidator();
 
 /**
  * @swagger
@@ -18,7 +21,7 @@ const studentController = new StudentController();
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   post:
  *     summary: Cadastrar um novo usuário
  *     tags: [Users]
@@ -50,11 +53,11 @@ const studentController = new StudentController();
  *       500:
  *         description: Erro ao criar usuário
  */
-router.post('/api/users', userController.createUser.bind(userController));
+router.post('/users', userController.createUser.bind(userController));
 
 /**
  * @swagger
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     summary: Fazer login
  *     tags: [Users]
@@ -78,38 +81,66 @@ router.post('/api/users', userController.createUser.bind(userController));
  *       400:
  *         description: Credenciais inválidas
  */
-router.post('/api/auth/login', authController.login.bind(authController));
+router.post('/auth/login', authController.login.bind(authController));
 
 /**
  * @swagger
- * tags:
- *   name: Students
- *   description: API para gestão de alunos
- */
-
-/**
- * @swagger
- * /api/students:
+ * /profile:
  *   post:
- *     summary: Cadastrar um novo aluno
- *     tags: [Students]
+ *     summary: Cadastrar um perfil de usuário
+ *     tags: [Profiles]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Student'
+ *             type: object
+ *             required:
+ *               - type
+ *               - birthDate
+ *               - educationLevel
+ *               - schoolType
+ *               - subjectsOfInterest
+ *               - phoneNumber
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Tipo de perfil, deve ser "student" para estudantes.
+ *                 example: "student"
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 description: Data de nascimento no formato DD/MM/AAAA.
+ *               educationLevel:
+ *                 type: string
+ *                 description: Escolaridade.
+ *                 enum: ["Ensino Médio (1º ano)", "Ensino Médio (2º ano)", "Ensino Médio (3º ano)"]
+ *               schoolType:
+ *                 type: string
+ *                 description: Tipo de escola.
+ *                 enum: ["Escola Pública", "Escola Privada"]
+ *               subjectsOfInterest:
+ *                 type: array
+ *                 description: Matérias de interesse.
+ *                 items:
+ *                   type: string
+ *                   enum: ["Língua Portuguesa", "Inglês", "Artes", "Educação Física", "Matemática", "Física", "Química", "Biologia", "História", "Geografia", "Filosofia", "Sociologia"]
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Número de celular formatado como (XX) XXXXX-XXXX.
  *     responses:
  *       201:
- *         description: Aluno cadastrado com sucesso
- *       404:
- *         description: Usuário não encontrado
+ *         description: Perfil cadastrado com sucesso
+ *       400:
+ *         description: Dados inválidos
  *       500:
- *         description: Erro ao cadastrar aluno
+ *         description: Erro no servidor
  */
 router.post(
-  '/api/students',
-  studentController.createStudent.bind(studentController),
+  '/profile',
+  authenticateToken, // Middleware de autenticação
+  profileValidator.validateProfile.bind(profileValidator),
+  profileController.createProfile.bind(profileController),
 );
 
 export default router;
