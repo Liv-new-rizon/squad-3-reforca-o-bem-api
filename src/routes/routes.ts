@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { UserController } from '../controller/UserController';
 import { AuthController } from '../controller/AuthController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -78,5 +79,25 @@ router.post('/api/users', userController.createUser.bind(userController));
  *         description: Credenciais inválidas
  */
 router.post('/api/auth/login', authController.login.bind(authController));
+
+/**
+ * @swagger
+ * /api/users/me:
+ *   get:
+ *     summary: Retorna os dados do usuário logado
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dados do usuário logado
+ *       401:
+ *         description: Token não fornecido ou inválido
+ */
+router.get(
+    '/api/users/me',
+    authMiddleware,
+    userController.getLoggedUser.bind(userController)
+);
 
 export default router;
