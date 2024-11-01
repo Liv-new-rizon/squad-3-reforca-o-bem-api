@@ -36,12 +36,16 @@ const authController = new AuthController();
  *             properties:
  *               name:
  *                 type: string
+ *                 example: "Reforca teste"
  *               email:
  *                 type: string
+ *                 example: "testeReforca@gmail.com"
  *               password:
  *                 type: string
+ *                 example: "12345678"
  *               confirmPassword:
  *                 type: string
+ *                 example: "12345678"
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
@@ -70,8 +74,10 @@ router.post('/api/users', userController.createUser.bind(userController));
  *             properties:
  *               email:
  *                 type: string
+ *                 example: "testeReforca@gmail.com"
  *               password:
  *                 type: string
+ *                 example: "12345678"
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
