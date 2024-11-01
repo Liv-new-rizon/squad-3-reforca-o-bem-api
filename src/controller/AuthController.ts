@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/CustomError';
 import { AuthService } from '../services/AuthService';
+import { UserRepository } from '../repositories/UserRepository';
 
 /**
  * Controlador de autenticação.
  */
 export class AuthController {
     private authService: AuthService;
+    private userRepository: UserRepository;
 
     constructor() {
         // Instancia o AuthService
         this.authService = new AuthService();
+        this.userRepository = new UserRepository();
     }
 
     /**
@@ -24,6 +27,12 @@ export class AuthController {
         try {
             const { email, password } = req.body;
             const token = await this.authService.loginUser(email, password);
+
+            const user = await this.userRepository.findByEmail(email);
+            if (user) {
+                user.token = token;
+                await this.userRepository.save(user);
+            }
 
             return res.status(200).json({
                 message: 'Login bem-sucedido',
