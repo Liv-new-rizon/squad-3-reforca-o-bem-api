@@ -20,7 +20,7 @@ export class AuthController {
    * @param res - Resposta HTTP com o token JWT ou uma mensagem de erro.
    * @returns Resposta com o token JWT gerado ou erro.
    */
-  async login(req: Request, res: Response): Promise<Response> {
+  public async login(req: Request, res: Response): Promise<Response> {
     try {
       const { email, password } = req.body;
       const token = await this.authService.loginUser(email, password);

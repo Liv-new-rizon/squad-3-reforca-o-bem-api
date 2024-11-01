@@ -10,9 +10,6 @@ export class Profile {
   id: ObjectId;
 
   @Column()
-  type: string;
-
-  @Column()
   userId: string;
 
   @Column()

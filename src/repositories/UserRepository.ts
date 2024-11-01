@@ -1,18 +1,28 @@
 import { MongoRepository } from 'typeorm';
-import { User } from '../models/Users';
+import { User } from '../models';
 import { MongoDataSource } from '../config/database';
 
 /**
- * Repositório da entidade User para encapsular o acesso aos dados.
+ * Repositório da entidade `User` para encapsular o acesso aos dados.
+ * Este repositório fornece métodos para operações CRUD na coleção de usuários.
  */
 export class UserRepository {
   private repository: MongoRepository<User>;
 
+  /**
+   * Cria uma instância de `UserRepository` e inicializa o repositório do TypeORM.
+   */
   constructor() {
     this.repository = MongoDataSource.getMongoRepository(User);
   }
 
-  public async findByEmail(email: string): Promise<User | undefined> {
+  /**
+   * Encontra um usuário pelo e-mail.
+   *
+   * @param email - O e-mail do usuário a ser encontrado.
+   * @returns Uma `Promise` que resolve com o usuário encontrado ou `undefined` caso não exista.
+   */
+  async findByEmail(email: string): Promise<User | undefined> {
     return this.repository.findOne({ where: { email } });
   }
 
