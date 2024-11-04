@@ -26,15 +26,33 @@ export class UserRepository {
     return this.repository.findOne({ where: { email } });
   }
 
-  public async findById(id: string): Promise<User | undefined> {
+  /**
+   * Encontra um usuário pelo ID.
+   *
+   * @param id - O ID do usuário a ser encontrado.
+   * @returns Uma `Promise` que resolve com o usuário encontrado ou `undefined` caso não exista.
+   */
+  async findById(id: string): Promise<User | undefined> {
     return this.repository.findOne({ where: { id } });
   }
 
-  public async save(user: User): Promise<User> {
+  /**
+   * Salva ou atualiza um usuário no banco de dados.
+   *
+   * @param user - O usuário a ser salvo.
+   * @returns Uma `Promise` que resolve com o usuário salvo.
+   */
+  async save(user: User): Promise<User> {
     return this.repository.save(user);
   }
 
-  public async create(userData: Partial<User>): Promise<User> {
+  /**
+   * Cria uma nova instância de usuário.
+   *
+   * @param userData - Os dados parciais do usuário a serem criados.
+   * @returns Uma `Promise` que resolve com a nova instância de usuário.
+   */
+  async create(userData: Partial<User>): Promise<User> {
     return this.repository.create(userData);
   }
 }

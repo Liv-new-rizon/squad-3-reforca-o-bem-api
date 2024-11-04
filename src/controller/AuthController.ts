@@ -8,8 +8,10 @@ import { AuthService } from '../services/AuthService';
 export class AuthController {
   private authService: AuthService;
 
+  /**
+   * Instancia o AuthService.
+   */
   constructor() {
-    // Instancia o AuthService
     this.authService = new AuthService();
   }
 
@@ -31,7 +33,6 @@ export class AuthController {
       });
     } catch (error) {
       if (error instanceof CustomError) {
-        // Mensagem genérica para erros de autenticação
         return res
           .status(error.status)
           .json({ message: 'Credenciais inválidas' });

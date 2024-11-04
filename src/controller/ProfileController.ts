@@ -7,14 +7,21 @@ import { ProfileRepository } from '../repositories/ProfileRepository';
 export class ProfileController {
   private profileRepository: ProfileRepository;
 
+  /**
+   * Instancia o ProfileRepository.
+   */
   constructor() {
     this.profileRepository = new ProfileRepository();
   }
 
   /**
    * Cria um novo perfil associado a um usuário existente.
+   *
+   * @param req - Requisição contendo os dados do perfil a ser criado.
+   * @param res - Resposta HTTP com o perfil criado ou uma mensagem de erro.
+   * @returns Resposta com o perfil criado ou erro.
    */
-  async createProfile(req: Request, res: Response): Promise<Response> {
+  public async createProfile(req: Request, res: Response): Promise<Response> {
     const {
       type,
       birthDate,
