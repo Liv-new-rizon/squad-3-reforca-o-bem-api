@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/CustomError';
 import { AuthService } from '../services/AuthService';
+import { UserRepository } from '../repositories/UserRepository';
 
 /**
  * Controlador de autenticação.
