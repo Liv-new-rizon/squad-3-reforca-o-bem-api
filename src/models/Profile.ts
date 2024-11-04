@@ -6,24 +6,27 @@ import { Entity, ObjectIdColumn, Column, ObjectId } from 'typeorm';
  */
 @Entity('profile')
 export class Profile {
-  @ObjectIdColumn()
-  id: ObjectId;
+    @ObjectIdColumn()
+    id: ObjectId;
 
-  @Column()
-  userId: string;
+    @Column()
+    type: string;
 
-  @Column()
-  birthDate: Date;
+    @Column()
+    userId: string;
 
-  @Column()
-  educationLevel: string;
+    @Column()
+    birthDate: Date;
 
-  @Column()
-  schoolType: string;
+    @Column()
+    educationLevel: string;
 
-  @Column()
-  subjectsOfInterest: string[];
+    @Column()
+    schoolType: string;
 
-  @Column()
-  phoneNumber: string;
+    @Column()
+    subjectsOfInterest: string[];
+
+    @Column()
+    phoneNumber: string;
 }

@@ -17,26 +17,26 @@ import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
  *          caso contrário, passa o controle para o próximo middleware.
  */
 export const authenticateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Token não fornecido' });
-  }
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Token não fornecido' });
+    }
 
-  const token = authHeader.split(' ')[1];
+    const token = authHeader.split(' ')[1];
 
-  try {
-    const decoded = JwtService.verifyToken(
-      token,
-      process.env.JWT_SECRET!,
-    ) as JwtPayloadCustom;
-    req.user = decoded;
-    next();
-  } catch (error) {
-    next(new CustomError('Token inválido ou expirado', 401));
-  }
+    try {
+        const decoded = JwtService.verifyToken(
+            token,
+            process.env.JWT_SECRET!
+        ) as JwtPayloadCustom;
+        req.user = decoded;
+        next();
+    } catch (error) {
+        next(new CustomError('Token inválido ou expirado', 401));
+    }
 };

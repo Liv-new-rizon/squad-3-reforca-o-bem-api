@@ -5,8 +5,8 @@
  * @returns `true` se o e-mail estiver no formato correto, `false` caso contrário.
  */
 export const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 };
 
 /**
@@ -16,17 +16,17 @@ export const validateEmail = (email: string): boolean => {
  * @returns `true` se a data estiver no formato e valor correto, `false` caso contrário.
  */
 export const validateBirthDate = (date: string): boolean => {
-  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
-  if (!dateRegex.test(date)) return false;
+    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
+    if (!dateRegex.test(date)) return false;
 
-  const [day, month, year] = date.split('/').map(Number);
-  const dateObject = new Date(year, month - 1, day);
+    const [day, month, year] = date.split('/').map(Number);
+    const dateObject = new Date(year, month - 1, day);
 
-  return (
-    dateObject.getFullYear() === year &&
-    dateObject.getMonth() === month - 1 &&
-    dateObject.getDate() === day
-  );
+    return (
+        dateObject.getFullYear() === year &&
+        dateObject.getMonth() === month - 1 &&
+        dateObject.getDate() === day
+    );
 };
 
 /**
@@ -36,12 +36,12 @@ export const validateBirthDate = (date: string): boolean => {
  * @returns `true` se a escolaridade for válida, `false` caso contrário.
  */
 export const validateEducationLevel = (educationLevel: string): boolean => {
-  const validLevels = [
-    'Ensino Médio (1º ano)',
-    'Ensino Médio (2º ano)',
-    'Ensino Médio (3º ano)',
-  ];
-  return validLevels.includes(educationLevel);
+    const validLevels = [
+        'Ensino Médio (1º ano)',
+        'Ensino Médio (2º ano)',
+        'Ensino Médio (3º ano)'
+    ];
+    return validLevels.includes(educationLevel);
 };
 
 /**
@@ -51,8 +51,8 @@ export const validateEducationLevel = (educationLevel: string): boolean => {
  * @returns `true` se o tipo de escola for válido, `false` caso contrário.
  */
 export const validateSchoolType = (schoolType: string): boolean => {
-  const validTypes = ['Escola Pública', 'Escola Privada'];
-  return validTypes.includes(schoolType);
+    const validTypes = ['Escola Pública', 'Escola Privada'];
+    return validTypes.includes(schoolType);
 };
 
 /**
@@ -62,21 +62,21 @@ export const validateSchoolType = (schoolType: string): boolean => {
  * @returns `true` se todas as matérias forem válidas, `false` caso contrário.
  */
 export const validateSubjectsOfInterest = (subjects: string[]): boolean => {
-  const validSubjects = [
-    'Língua Portuguesa',
-    'Inglês',
-    'Artes',
-    'Educação Física',
-    'Matemática',
-    'Física',
-    'Química',
-    'Biologia',
-    'História',
-    'Geografia',
-    'Filosofia',
-    'Sociologia',
-  ];
-  return subjects.every((subject) => validSubjects.includes(subject));
+    const validSubjects = [
+        'Língua Portuguesa',
+        'Inglês',
+        'Artes',
+        'Educação Física',
+        'Matemática',
+        'Física',
+        'Química',
+        'Biologia',
+        'História',
+        'Geografia',
+        'Filosofia',
+        'Sociologia'
+    ];
+    return subjects.every((subject) => validSubjects.includes(subject));
 };
 
 /**
@@ -86,8 +86,10 @@ export const validateSubjectsOfInterest = (subjects: string[]): boolean => {
  * @returns O número formatado se válido, `null` caso contrário.
  */
 export const formatPhoneNumber = (phone: string): string | null => {
-  const cleaned = phone.replace(/\D/g, '');
-  if (cleaned.length !== 11) return null;
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length !== 11) return null;
 
-  return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(
+        7
+    )}`;
 };

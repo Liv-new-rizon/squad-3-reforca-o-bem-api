@@ -3,6 +3,6 @@
  * Inclui o identificador único do usuário.
  */
 export interface JwtPayloadCustom {
-  /** Identificador único do usuário */
-  userId: string;
+    /** Identificador único do usuário */
+    userId: string;
 }

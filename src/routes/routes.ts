@@ -91,7 +91,7 @@ router.post('/auth/login', authController.login.bind(authController));
 
 /**
  * @swagger
- * /api/users/me:
+ * /users/me:
  *   get:
  *     summary: Retorna os dados do usuário logado
  *     tags: [Users]
@@ -104,9 +104,9 @@ router.post('/auth/login', authController.login.bind(authController));
  *         description: Token não fornecido ou inválido
  */
 router.get(
-  '/api/users/me',
-  authenticateToken,
-  userController.getLoggedUser.bind(userController),
+    '/users/me',
+    authenticateToken,
+    userController.getLoggedUser.bind(userController)
 );
 
 /**
@@ -115,6 +115,8 @@ router.get(
  *   post:
  *     summary: Cadastrar um perfil de usuário
  *     tags: [Profiles]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -163,10 +165,10 @@ router.get(
  *         description: Erro no servidor
  */
 router.post(
-  '/profile',
-  authenticateToken, // Middleware de autenticação
-  profileValidator.validateProfile.bind(profileValidator),
-  profileController.createProfile.bind(profileController),
+    '/profile',
+    authenticateToken,
+    profileValidator.validateProfile.bind(profileValidator),
+    profileController.createProfile.bind(profileController)
 );
 
 export default router;
