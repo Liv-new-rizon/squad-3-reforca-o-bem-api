@@ -86,9 +86,6 @@ export class UserController {
         const userId = (req.user as JwtPayloadCustom).userId;
         const user = await this.userRepository.findById(userId);
 
-        console.log('user', user);
-        console.log('userId', userId);
-
         return res.status(200).json({
             message: 'Dados do usuário logado',
             user: { id: user.id, name: user.name, email: user.email }
