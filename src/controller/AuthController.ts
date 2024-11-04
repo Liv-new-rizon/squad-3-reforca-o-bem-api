@@ -1,17 +1,20 @@
 import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/CustomError';
 import { AuthService } from '../services/AuthService';
+import { UserRepository } from '../repositories/UserRepository';
 
 /**
  * Controlador de autenticação.
  */
 export class AuthController {
+
   private authService: AuthService;
 
   constructor() {
     // Instancia o AuthService
     this.authService = new AuthService();
   }
+
 
   /**
    * Realiza o login do usuário, gerando e retornando o token JWT.
@@ -37,6 +40,7 @@ export class AuthController {
           .json({ message: 'Credenciais inválidas' });
       }
       return res.status(500).json({ message: 'Erro interno de servidor' });
+
     }
   }
 }

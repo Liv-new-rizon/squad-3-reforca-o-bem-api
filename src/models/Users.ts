@@ -18,6 +18,7 @@ export class User {
   @Column()
   password: string; // Senha do usuário armazenada com hash
 
+
   @Column({ type: 'int', default: 0 })
   loginCount: number; // Número de logins realizados pelo usuário
 
