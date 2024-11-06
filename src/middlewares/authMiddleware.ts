@@ -16,7 +16,7 @@ import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
  * @returns Retorna uma resposta 401 se o token não for fornecido ou for inválido,
  *          caso contrário, passa o controle para o próximo middleware.
  */
-export const authMiddleware = (
+export const authenticateToken = (
     req: Request,
     res: Response,
     next: NextFunction

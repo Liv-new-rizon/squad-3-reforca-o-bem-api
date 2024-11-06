@@ -8,12 +8,12 @@ import { UserRepository } from '../repositories/UserRepository';
  */
 export class AuthController {
     private authService: AuthService;
-    private userRepository: UserRepository;
 
+    /**
+     * Instancia o AuthService.
+     */
     constructor() {
-        // Instancia o AuthService
         this.authService = new AuthService();
-        this.userRepository = new UserRepository();
     }
 
     /**
@@ -28,19 +28,12 @@ export class AuthController {
             const { email, password } = req.body;
             const token = await this.authService.loginUser(email, password);
 
-            const user = await this.userRepository.findByEmail(email);
-            if (user) {
-                user.token = token;
-                await this.userRepository.save(user);
-            }
-
             return res.status(200).json({
                 message: 'Login bem-sucedido',
                 token
             });
         } catch (error) {
             if (error instanceof CustomError) {
-                // Mensagem genérica para erros de autenticação
                 return res
                     .status(error.status)
                     .json({ message: 'Credenciais inválidas' });

@@ -6,30 +6,52 @@ import bcrypt from 'bcrypt';
  */
 @Entity('users')
 export class User {
+    /**
+     * Identificador único do usuário.
+     */
     @ObjectIdColumn()
-    id: string; // Identificador único do usuário
+    id: string;
 
+    /**
+     * Nome do usuário.
+     */
     @Column()
-    name: string; // Nome do usuário
+    name: string;
 
+    /**
+     * E-mail do usuário, deve ser único e não pode ser nulo.
+     */
     @Column({ unique: true, nullable: false })
-    email: string; // E-mail do usuário, deve ser único e não pode ser nulo
+    email: string;
 
+    /**
+     * Senha do usuário armazenada com hash.
+     */
     @Column()
-    password: string; // Senha do usuário armazenada com hash
+    password: string;
 
-    @Column({ nullable: true })
-    token?: string;
-
+    /**
+     * Número de logins realizados pelo usuário.
+     */
     @Column({ type: 'int', default: 0 })
-    loginCount: number; // Número de logins realizados pelo usuário
+    loginCount: number;
 
+    /**
+     * Data e hora do último login do usuário.
+     */
     @Column({ type: 'date', nullable: true })
-    lastLogin: Date; // Data e hora do último login do usuário
+    lastLogin: Date;
 
+    /**
+     * Data de criação do usuário.
+     */
     @Column({ type: 'date', default: () => 'NOW()' })
-    createdAt: Date; // Data de criação do usuário
+    createdAt: Date;
 
+    /**
+     * Valida o formato do e-mail antes de inserir no banco de dados.
+     * @throws {Error} Se o e-mail estiver em um formato inválido.
+     */
     @BeforeInsert()
     validateEmail(): void {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,6 +60,9 @@ export class User {
         }
     }
 
+    /**
+     * Gera um hash para a senha antes de inseri-la no banco de dados.
+     */
     @BeforeInsert()
     async hashPassword(): Promise<void> {
         if (!this.password.startsWith('$2b$')) {
@@ -46,6 +71,11 @@ export class User {
         }
     }
 
+    /**
+     * Compara a senha fornecida com o hash armazenado.
+     * @param candidatePassword - A senha fornecida para comparar.
+     * @returns {Promise<boolean>} Retorna verdadeiro se as senhas coincidirem, falso caso contrário.
+     */
     async comparePassword(candidatePassword: string): Promise<boolean> {
         return bcrypt.compare(candidatePassword, this.password);
     }

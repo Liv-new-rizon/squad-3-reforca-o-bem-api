@@ -1,13 +1,16 @@
 import { Router } from 'express';
-
 import { UserController } from '../controller/UserController';
 import { AuthController } from '../controller/AuthController';
-import { authMiddleware } from '../middleware/authMiddleware';
+import { authenticateToken } from '../middlewares/authMiddleware';
+import { ProfileController } from '../controller/ProfileController';
+import { ProfileValidator } from '../validator/ProfileValidator';
 
 const router = Router();
 
 const userController = new UserController();
 const authController = new AuthController();
+const profileController = new ProfileController();
+const profileValidator = new ProfileValidator();
 
 /**
  * @swagger
@@ -18,7 +21,7 @@ const authController = new AuthController();
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   post:
  *     summary: Cadastrar um novo usuário
  *     tags: [Users]
@@ -54,11 +57,11 @@ const authController = new AuthController();
  *       500:
  *         description: Erro ao criar usuário
  */
-router.post('/api/users', userController.createUser.bind(userController));
+router.post('/users', userController.createUser.bind(userController));
 
 /**
  * @swagger
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     summary: Fazer login
  *     tags: [Users]
@@ -84,11 +87,11 @@ router.post('/api/users', userController.createUser.bind(userController));
  *       400:
  *         description: Credenciais inválidas
  */
-router.post('/api/auth/login', authController.login.bind(authController));
+router.post('/auth/login', authController.login.bind(authController));
 
 /**
  * @swagger
- * /api/users/me:
+ * /users/me:
  *   get:
  *     summary: Retorna os dados do usuário logado
  *     tags: [Users]
@@ -101,9 +104,71 @@ router.post('/api/auth/login', authController.login.bind(authController));
  *         description: Token não fornecido ou inválido
  */
 router.get(
-    '/api/users/me',
-    authMiddleware,
+    '/users/me',
+    authenticateToken,
     userController.getLoggedUser.bind(userController)
+);
+
+/**
+ * @swagger
+ * /profile:
+ *   post:
+ *     summary: Cadastrar um perfil de usuário
+ *     tags: [Profiles]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - type
+ *               - birthDate
+ *               - educationLevel
+ *               - schoolType
+ *               - subjectsOfInterest
+ *               - phoneNumber
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Tipo de perfil, deve ser "student" para estudantes.
+ *                 example: "student"
+ *               birthDate:
+ *                 type: string
+ *                 format: date
+ *                 description: Data de nascimento no formato DD/MM/AAAA.
+ *               educationLevel:
+ *                 type: string
+ *                 description: Escolaridade.
+ *                 enum: ["Ensino Médio (1º ano)", "Ensino Médio (2º ano)", "Ensino Médio (3º ano)"]
+ *               schoolType:
+ *                 type: string
+ *                 description: Tipo de escola.
+ *                 enum: ["Escola Pública", "Escola Privada"]
+ *               subjectsOfInterest:
+ *                 type: array
+ *                 description: Matérias de interesse.
+ *                 items:
+ *                   type: string
+ *                   enum: ["Língua Portuguesa", "Inglês", "Artes", "Educação Física", "Matemática", "Física", "Química", "Biologia", "História", "Geografia", "Filosofia", "Sociologia"]
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Número de celular formatado como (XX) XXXXX-XXXX.
+ *     responses:
+ *       201:
+ *         description: Perfil cadastrado com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       500:
+ *         description: Erro no servidor
+ */
+router.post(
+    '/profile',
+    authenticateToken,
+    profileValidator.validateProfile.bind(profileValidator),
+    profileController.createProfile.bind(profileController)
 );
 
 export default router;

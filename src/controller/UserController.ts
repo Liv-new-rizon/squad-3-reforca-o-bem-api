@@ -49,7 +49,7 @@ export class UserController {
             }
 
             const hashedPassword = await hashPassword(password);
-            const newUser = this.userRepository.create({
+            const newUser = await this.userRepository.create({
                 name,
                 email,
                 password: hashedPassword
@@ -84,7 +84,7 @@ export class UserController {
      */
     public async getLoggedUser(req: Request, res: Response): Promise<Response> {
         const userId = (req.user as JwtPayloadCustom).userId;
-        const user = await this.userRepository.findByUserId(userId);
+        const user = await this.userRepository.findById(userId);
 
         return res.status(200).json({
             message: 'Dados do usuário logado',

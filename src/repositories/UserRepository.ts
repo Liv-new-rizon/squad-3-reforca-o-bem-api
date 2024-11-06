@@ -28,9 +28,19 @@ export class UserRepository {
     }
 
     /**
-     * Salva um novo usuário no banco de dados.
+     * Encontra um usuário pelo ID.
      *
-     * @param user - O objeto do usuário a ser salvo.
+     * @param id - O ID do usuário a ser encontrado.
+     * @returns Uma `Promise` que resolve com o usuário encontrado ou `undefined` caso não exista.
+     */
+    async findById(id: string): Promise<User | undefined> {
+        return this.repository.findOne({ where: { _id: new ObjectId(id) } });
+    }
+
+    /**
+     * Salva ou atualiza um usuário no banco de dados.
+     *
+     * @param user - O usuário a ser salvo.
      * @returns Uma `Promise` que resolve com o usuário salvo.
      */
     async save(user: User): Promise<User> {
@@ -38,24 +48,12 @@ export class UserRepository {
     }
 
     /**
-     * Cria uma instância de usuário sem salvar no banco.
+     * Cria uma nova instância de usuário.
      *
-     * @param userData - Os dados parciais do usuário para criar uma nova instância de `User`.
-     * @returns Uma nova instância de `User`, que ainda não foi salva no banco de dados.
+     * @param userData - Os dados parciais do usuário a serem criados.
+     * @returns Uma `Promise` que resolve com a nova instância de usuário.
      */
-    create(userData: Partial<User>): User {
+    async create(userData: Partial<User>): Promise<User> {
         return this.repository.create(userData);
-    }
-
-    /**
-     * Encontra um usuário pelo `userId`.
-     *
-     * @param userId - O ID do usuário a ser encontrado.
-     * @returns Uma `Promise` que resolve com o usuário encontrado ou `undefined` se não existir.
-     */
-    async findByUserId(userId: string): Promise<User | undefined> {
-        return this.repository.findOne({
-            where: { _id: new ObjectId(userId) }
-        });
     }
 }
