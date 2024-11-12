@@ -15,18 +15,36 @@ export class Profile {
     @Column()
     userId: string;
 
-    @Column()
-    birthDate: Date;
-
-    @Column()
-    educationLevel: string;
-
-    @Column()
-    schoolType: string;
-
-    @Column()
-    subjectsOfInterest: string[];
-
+    // Campos comuns
     @Column()
     phoneNumber: string;
+
+    // Campos específicos do aluno
+    @Column({ nullable: true })
+    birthDate?: Date;
+
+    @Column({ nullable: true })
+    educationLevel?: string;
+
+    @Column({ nullable: true })
+    schoolType?: string;
+
+    @Column({ nullable: true })
+    subjectsOfInterest?: string[];
+
+    // Campos específicos do tutor
+    @Column({ nullable: true })
+    profession?: string;
+
+    @Column({ nullable: true })
+    classEntity?: string;
+
+    @Column({ nullable: true })
+    regionalCouncil?: string;
+
+    @Column({ nullable: true })
+    documentNumber?: string;
+
+    @Column({ nullable: true })
+    subjectsOfExpertise?: string[];
 }

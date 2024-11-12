@@ -93,3 +93,69 @@ export const formatPhoneNumber = (phone: string): string | null => {
         7
     )}`;
 };
+
+/**
+ * Valida se a profissão é composta apenas por letras.
+ *
+ * @param profession - A profissão a ser validada.
+ * @returns `true` se a profissão contiver apenas letras, `false` caso contrário.
+ */
+export const validateProfession = (profession: string): boolean => {
+    const professionRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    return professionRegex.test(profession);
+};
+
+/**
+ * Valida se a entidade de classe é "sim" ou "não".
+ *
+ * @param classEntity - A entidade de classe a ser validada.
+ * @returns `true` se a entidade for "sim" ou "não", `false` caso contrário.
+ */
+export const validateClassEntity = (classEntity: string): boolean => {
+    return classEntity === 'sim' || classEntity === 'não';
+};
+
+/**
+ * Valida se o conselho regional ou entidade de classe está no formato alfanumérico permitido.
+ *
+ * @param regionalCouncil - O conselho regional ou entidade de classe.
+ * @returns `true` se o conselho for válido, `false` caso contrário.
+ */
+export const validateRegionalCouncil = (regionalCouncil: string): boolean => {
+    const regionalCouncilRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s/-]+$/;
+    return regionalCouncilRegex.test(regionalCouncil);
+};
+
+/**
+ * Valida se o número de documento está no formato alfanumérico permitido.
+ *
+ * @param documentNumber - O número de documento.
+ * @returns `true` se o número de documento for válido, `false` caso contrário.
+ */
+export const validateDocumentNumber = (documentNumber: string): boolean => {
+    const documentNumberRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9/-]+$/;
+    return documentNumberRegex.test(documentNumber);
+};
+
+/**
+ * Valida se as matérias de especialização são todas válidas.
+ *
+ * @param subjects - Lista de matérias de especialização.
+ * @returns `true` se todas as matérias forem válidas, `false` caso contrário.
+ */
+export const validateSubjectsOfExpertise = (subjects: string[]): boolean => {
+    const validSubjects = [
+        'Matemática',
+        'Língua Portuguesa',
+        'História',
+        'Geografia',
+        'Biologia',
+        'Química',
+        'Física',
+        'Inglês',
+        'Sociologia',
+        'Filosofia',
+        'Artes'
+    ];
+    return subjects.every((subject) => validSubjects.includes(subject));
+};

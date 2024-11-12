@@ -5,6 +5,11 @@ import {
     validateEducationLevel,
     validateSchoolType,
     validateSubjectsOfInterest,
+    validateProfession,
+    validateClassEntity,
+    validateRegionalCouncil,
+    validateDocumentNumber,
+    validateSubjectsOfExpertise,
     formatPhoneNumber
 } from '../utils/validation';
 
@@ -31,7 +36,12 @@ export class ProfileValidator {
             educationLevel,
             schoolType,
             subjectsOfInterest,
-            phoneNumber
+            phoneNumber,
+            profession,
+            classEntity,
+            regionalCouncil,
+            documentNumber,
+            subjectsOfExpertise
         } = req.body;
 
         const errors: string[] = [];
@@ -66,14 +76,55 @@ export class ProfileValidator {
                 if (!user) {
                     errors.push('Usuário não encontrado.');
                 }
+            } else if (type === 'tutor') {
+                if (!validateProfession(profession)) {
+                    errors.push(
+                        'Profissão inválida. Apenas letras são permitidas.'
+                    );
+                }
 
-                if (errors.length > 0) {
-                    return res.status(400).json({ errors });
+                if (!validateClassEntity(classEntity)) {
+                    errors.push(
+                        'Entidade de classe inválida. Escolha entre "sim" ou "não".'
+                    );
+                }
+
+                if (classEntity === 'sim') {
+                    if (!validateRegionalCouncil(regionalCouncil)) {
+                        errors.push(
+                            'Conselho Regional ou Entidade de Classe inválido.'
+                        );
+                    }
+
+                    if (!validateDocumentNumber(documentNumber)) {
+                        errors.push('Número de documento inválido.');
+                    }
+                }
+
+                if (!validateSubjectsOfExpertise(subjectsOfExpertise)) {
+                    errors.push('Matérias de especialização inválidas.');
+                }
+
+                const formattedPhone = formatPhoneNumber(phoneNumber);
+                if (!formattedPhone) {
+                    errors.push(
+                        'Número de celular inválido. Deve conter 11 dígitos.'
+                    );
+                }
+
+                const userId = req.user.userId;
+                const user = await new UserRepository().findById(userId!);
+                if (!user) {
+                    errors.push('Usuário não encontrado.');
                 }
             } else {
                 return res
                     .status(400)
                     .json({ message: 'Tipo de Perfil Inválido.' });
+            }
+
+            if (errors.length > 0) {
+                return res.status(400).json({ errors });
             }
 
             next();
