@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/CustomError';
 import { AuthService } from '../services/AuthService';
 import { UserRepository } from '../repositories/UserRepository';
+import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
 
 /**
  * Controlador de autenticação.
@@ -50,5 +51,22 @@ export class AuthController {
                 .status(500)
                 .json({ message: 'Erro interno de servidor' });
         }
+    }
+
+    async logout(req: Request, res: Response): Promise<Response> {
+        const userId = (req.user as JwtPayloadCustom).userId;
+        const userRepository = new UserRepository();
+
+        const user = await userRepository.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        user.token = null; // Invalida o token removendo-o do banco
+        await userRepository.save(user);
+
+        return res
+            .status(200)
+            .json({ message: 'Logout realizado com sucesso' });
     }
 }
