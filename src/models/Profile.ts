@@ -15,11 +15,9 @@ export class Profile {
     @Column()
     userId: string;
 
-    // Campos comuns
     @Column()
     phoneNumber: string;
 
-    // Campos específicos do aluno
     @Column({ nullable: true })
     birthDate?: Date;
 
@@ -32,12 +30,11 @@ export class Profile {
     @Column({ nullable: true })
     subjectsOfInterest?: string[];
 
-    // Campos específicos do tutor
     @Column({ nullable: true })
     profession?: string;
 
     @Column({ nullable: true })
-    classEntity?: string;
+    hasProfessionalAffiliation?: boolean;
 
     @Column({ nullable: true })
     regionalCouncil?: string;

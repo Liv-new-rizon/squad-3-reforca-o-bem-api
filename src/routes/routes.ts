@@ -139,6 +139,7 @@ router.get(
  *                 type: string
  *                 format: date
  *                 description: Data de nascimento no formato DD/MM/AAAA.
+ *                 example: "01/01/2000"
  *               educationLevel:
  *                 type: string
  *                 description: Escolaridade.
@@ -200,6 +201,7 @@ router.post(
  *               profession:
  *                 type: string
  *                 description: Profissão do tutor.
+ *                 example: "professor"
  *               classEntity:
  *                 type: string
  *                 description: Indica se o tutor possui entidade de classe (sim ou não).

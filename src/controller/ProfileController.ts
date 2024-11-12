@@ -71,7 +71,7 @@ export class ProfileController {
     ): Promise<Response> {
         const {
             profession,
-            classEntity,
+            hasProfessionalAffiliation,
             regionalCouncil,
             documentNumber,
             subjectsOfExpertise,
@@ -85,7 +85,7 @@ export class ProfileController {
                 userId,
                 type: 'Tutor',
                 profession,
-                classEntity,
+                hasProfessionalAffiliation,
                 regionalCouncil,
                 documentNumber,
                 subjectsOfExpertise,

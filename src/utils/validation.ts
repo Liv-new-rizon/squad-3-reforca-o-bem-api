@@ -56,30 +56,6 @@ export const validateSchoolType = (schoolType: string): boolean => {
 };
 
 /**
- * Valida se as matérias de interesse são todas válidas.
- *
- * @param subjects - Lista de matérias de interesse.
- * @returns `true` se todas as matérias forem válidas, `false` caso contrário.
- */
-export const validateSubjectsOfInterest = (subjects: string[]): boolean => {
-    const validSubjects = [
-        'Língua Portuguesa',
-        'Inglês',
-        'Artes',
-        'Educação Física',
-        'Matemática',
-        'Física',
-        'Química',
-        'Biologia',
-        'História',
-        'Geografia',
-        'Filosofia',
-        'Sociologia'
-    ];
-    return subjects.every((subject) => validSubjects.includes(subject));
-};
-
-/**
  * Formata e valida o número de telefone no formato (XX) XXXXX-XXXX.
  *
  * @param phone - O número de telefone como string.
@@ -135,27 +111,4 @@ export const validateRegionalCouncil = (regionalCouncil: string): boolean => {
 export const validateDocumentNumber = (documentNumber: string): boolean => {
     const documentNumberRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9/-]+$/;
     return documentNumberRegex.test(documentNumber);
-};
-
-/**
- * Valida se as matérias de especialização são todas válidas.
- *
- * @param subjects - Lista de matérias de especialização.
- * @returns `true` se todas as matérias forem válidas, `false` caso contrário.
- */
-export const validateSubjectsOfExpertise = (subjects: string[]): boolean => {
-    const validSubjects = [
-        'Matemática',
-        'Língua Portuguesa',
-        'História',
-        'Geografia',
-        'Biologia',
-        'Química',
-        'Física',
-        'Inglês',
-        'Sociologia',
-        'Filosofia',
-        'Artes'
-    ];
-    return subjects.every((subject) => validSubjects.includes(subject));
 };

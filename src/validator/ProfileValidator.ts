@@ -4,14 +4,16 @@ import {
     validateBirthDate,
     validateEducationLevel,
     validateSchoolType,
-    validateSubjectsOfInterest,
     validateProfession,
     validateClassEntity,
     validateRegionalCouncil,
     validateDocumentNumber,
-    validateSubjectsOfExpertise,
     formatPhoneNumber
 } from '../utils/validation';
+import {
+    validateSubjectsOfInterest,
+    validateSubjectsOfExpertise
+} from '../utils/subjectValidation';
 
 /**
  * Validador para verificar a integridade dos dados de perfil.
