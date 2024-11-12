@@ -53,7 +53,15 @@ export class AuthController {
         }
     }
 
-    async logout(req: Request, res: Response): Promise<Response> {
+    /**
+     * Realiza o logout do usuário, removendo o token do banco de dados.
+     *
+     * @param req - Objeto de requisição do Express.
+     * @param res - Objeto de resposta do Express.
+     * @returns Resposta de sucesso para confirmar o logout.
+     */
+
+    public async logout(req: Request, res: Response): Promise<Response> {
         const userId = (req.user as JwtPayloadCustom).userId;
         const userRepository = new UserRepository();
 
