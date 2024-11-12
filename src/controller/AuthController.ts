@@ -8,12 +8,14 @@ import { UserRepository } from '../repositories/UserRepository';
  */
 export class AuthController {
     private authService: AuthService;
+    private userRepository: UserRepository;
 
     /**
      * Instancia o AuthService.
      */
     constructor() {
         this.authService = new AuthService();
+        this.userRepository = new UserRepository();
     }
 
     /**
@@ -27,6 +29,12 @@ export class AuthController {
         try {
             const { email, password } = req.body;
             const token = await this.authService.loginUser(email, password);
+
+            const user = await this.userRepository.findByEmail(email);
+            if (user) {
+                user.token = token; // Atribuir o token ao campo `token` do usuário
+                await this.userRepository.save(user); // Salvar o usuário com o token atualizado
+            }
 
             return res.status(200).json({
                 message: 'Login bem-sucedido',
