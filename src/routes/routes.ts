@@ -111,9 +111,9 @@ router.get(
 
 /**
  * @swagger
- * /profile:
+ * /profile/student:
  *   post:
- *     summary: Cadastrar um perfil de usuário
+ *     summary: Cadastrar um perfil de aluno
  *     tags: [Profiles]
  *     security:
  *       - BearerAuth: []
@@ -139,6 +139,7 @@ router.get(
  *                 type: string
  *                 format: date
  *                 description: Data de nascimento no formato DD/MM/AAAA.
+ *                 example: "01/01/2000"
  *               educationLevel:
  *                 type: string
  *                 description: Escolaridade.
@@ -156,16 +157,17 @@ router.get(
  *               phoneNumber:
  *                 type: string
  *                 description: Número de celular formatado como (XX) XXXXX-XXXX.
+ *                 example: "(XX) XXXXX-XXXX"
  *     responses:
  *       201:
- *         description: Perfil cadastrado com sucesso
+ *         description: Perfil de aluno cadastrado com sucesso
  *       400:
  *         description: Dados inválidos
  *       500:
  *         description: Erro no servidor
  */
 router.post(
-    '/profile',
+    '/profile/student',
     authenticateToken,
     profileValidator.validateProfile.bind(profileValidator),
     profileController.createProfile.bind(profileController)
@@ -205,6 +207,73 @@ router.post(
     '/auth/logout',
     authenticateToken,
     authController.logout.bind(authController)
+);
+
+/**
+ * @swagger
+ * /profile/tutor:
+ *   post:
+ *     summary: Cadastrar um perfil de tutor
+ *     tags: [Profiles]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - type
+ *               - profession
+ *               - classEntity
+ *               - subjectsOfExpertise
+ *               - phoneNumber
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Tipo de perfil, deve ser "tutor" para tutores.
+ *                 example: "tutor"
+ *               profession:
+ *                 type: string
+ *                 description: Profissão do tutor.
+ *                 example: "professor"
+ *               classEntity:
+ *                 type: string
+ *                 description: Indica se o tutor possui entidade de classe (sim ou não).
+ *                 example: "sim ou não"
+ *                 enum: ["sim", "não"]
+ *               regionalCouncil:
+ *                 type: string
+ *                 description: Conselho regional ou entidade de classe, obrigatório se classEntity for "sim".
+ *                 example: "conselho regional ou entidade de classe"
+ *               documentNumber:
+ *                 type: string
+ *                 description: Número de documento da entidade de classe, obrigatório se classEntity for "sim".
+ *                 example: "12345678"
+ *               subjectsOfExpertise:
+ *                 type: array
+ *                 description: Matérias de especialização.
+ *                 items:
+ *                   type: string
+ *                   enum: ["Matemática", "Língua Portuguesa", "História", "Geografia", "Biologia", "Química", "Física", "Inglês", "Sociologia", "Filosofia", "Artes"]
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Número de celular formatado como (XX) XXXXX-XXXX.
+ *                 example: "(XX) XXXXX-XXXX"
+ *     responses:
+ *       201:
+ *         description: Perfil de tutor cadastrado com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       500:
+ *         description: Erro no servidor
+ */
+router.post(
+    '/profile/tutor',
+    authenticateToken,
+    profileValidator.validateProfile.bind(profileValidator),
+    profileController.createTutorProfile.bind(profileController)
 );
 
 export default router;

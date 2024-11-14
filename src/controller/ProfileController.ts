@@ -15,9 +15,9 @@ export class ProfileController {
     }
 
     /**
-     * Cria um novo perfil associado a um usuário existente.
+     * Cria um novo perfil de aluno associado a um usuário existente.
      *
-     * @param req - Requisição contendo os dados do perfil a ser criado.
+     * @param req - Requisição contendo os dados do perfil de aluno a ser criado.
      * @param res - Resposta HTTP com o perfil criado ou uma mensagem de erro.
      * @returns Resposta com o perfil criado ou erro.
      */
@@ -31,7 +31,7 @@ export class ProfileController {
             phoneNumber
         } = req.body;
 
-        const userId = req.user.userId; // `userId` extraído do token e adicionado pelo middleware de autenticação
+        const userId = req.user.userId;
 
         try {
             const newProfile = this.profileRepository.create({
@@ -53,6 +53,54 @@ export class ProfileController {
         } catch (error) {
             return res.status(500).json({
                 message: 'Erro ao cadastrar perfil',
+                error: error.message
+            });
+        }
+    }
+
+    /**
+     * Cria um novo perfil de tutor associado a um usuário existente.
+     *
+     * @param req - Requisição contendo os dados do perfil de tutor a ser criado.
+     * @param res - Resposta HTTP com o perfil criado ou uma mensagem de erro.
+     * @returns Resposta com o perfil criado ou erro.
+     */
+    public async createTutorProfile(
+        req: Request,
+        res: Response
+    ): Promise<Response> {
+        const {
+            profession,
+            hasProfessionalAffiliation,
+            regionalCouncil,
+            documentNumber,
+            subjectsOfExpertise,
+            phoneNumber
+        } = req.body;
+
+        const userId = req.user.userId;
+
+        try {
+            const newTutorProfile = this.profileRepository.create({
+                userId,
+                type: 'Tutor',
+                profession,
+                hasProfessionalAffiliation,
+                regionalCouncil,
+                documentNumber,
+                subjectsOfExpertise,
+                phoneNumber
+            });
+
+            await this.profileRepository.save(newTutorProfile);
+
+            return res.status(201).json({
+                message: 'Perfil de tutor cadastrado com sucesso',
+                profile: newTutorProfile
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Erro ao cadastrar perfil de tutor',
                 error: error.message
             });
         }
