@@ -31,6 +31,12 @@ export class User {
     password: string;
 
     /**
+     * Armazenar o token do usuário
+     */
+    @Column({ nullable: true })
+    token?: string;
+
+    /**
      * Número de logins realizados pelo usuário.
      */
     @Column({ type: 'int', default: 0 })

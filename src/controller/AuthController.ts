@@ -2,18 +2,21 @@ import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/CustomError';
 import { AuthService } from '../services/AuthService';
 import { UserRepository } from '../repositories/UserRepository';
+import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
 
 /**
  * Controlador de autenticação.
  */
 export class AuthController {
     private authService: AuthService;
+    private userRepository: UserRepository;
 
     /**
      * Instancia o AuthService.
      */
     constructor() {
         this.authService = new AuthService();
+        this.userRepository = new UserRepository();
     }
 
     /**
@@ -27,6 +30,12 @@ export class AuthController {
         try {
             const { email, password } = req.body;
             const token = await this.authService.loginUser(email, password);
+
+            const user = await this.userRepository.findByEmail(email);
+            if (user) {
+                user.token = token; // Atribuir o token ao campo `token` do usuário
+                await this.userRepository.save(user); // Salvar o usuário com o token atualizado
+            }
 
             return res.status(200).json({
                 message: 'Login bem-sucedido',
@@ -42,5 +51,30 @@ export class AuthController {
                 .status(500)
                 .json({ message: 'Erro interno de servidor' });
         }
+    }
+
+    /**
+     * Realiza o logout do usuário, removendo o token do banco de dados.
+     *
+     * @param req - Objeto de requisição do Express.
+     * @param res - Objeto de resposta do Express.
+     * @returns Resposta de sucesso para confirmar o logout.
+     */
+
+    public async logout(req: Request, res: Response): Promise<Response> {
+        const userId = (req.user as JwtPayloadCustom).userId;
+        const userRepository = new UserRepository();
+
+        const user = await userRepository.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        user.token = null; // Invalida o token removendo-o do banco
+        await userRepository.save(user);
+
+        return res
+            .status(200)
+            .json({ message: 'Logout realizado com sucesso' });
     }
 }
