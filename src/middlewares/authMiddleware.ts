@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '../library/jwt';
 import { CustomError } from '../interfaces/CustomError';
 import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
+import { UserRepository } from '../repositories/UserRepository';
 
 /**
  * Middleware de autenticação para validar tokens JWT.
@@ -16,7 +17,7 @@ import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
  * @returns Retorna uma resposta 401 se o token não for fornecido ou for inválido,
  *          caso contrário, passa o controle para o próximo middleware.
  */
-export const authenticateToken = (
+export const authenticateToken = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -34,6 +35,21 @@ export const authenticateToken = (
             token,
             process.env.JWT_SECRET!
         ) as JwtPayloadCustom;
+
+        const userRepository = new UserRepository();
+        const user = await userRepository.findById(decoded.userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        // Verificar se o token fornecido corresponde ao token armazenado no banco
+        if (user.token !== token) {
+            return res
+                .status(401)
+                .json({ message: 'Token inválido ou expirado' });
+        }
+
         req.user = decoded;
         next();
     } catch (error) {

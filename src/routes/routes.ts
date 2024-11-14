@@ -175,6 +175,42 @@ router.post(
 
 /**
  * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Fazer logout
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Logout realizado com sucesso"
+ *       401:
+ *         description: Token não fornecido ou inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Token inválido ou expirado"
+ */
+router.post(
+    '/auth/logout',
+    authenticateToken,
+    authController.logout.bind(authController)
+);
+
+/**
+ * @swagger
  * /profile/tutor:
  *   post:
  *     summary: Cadastrar um perfil de tutor
