@@ -2,17 +2,24 @@ import { Request, Response } from 'express';
 import { ProfileRepository } from '../repositories/ProfileRepository';
 
 /**
+ * Decorator para injetar dinamicamente uma instância de repositório.
+ */
+function InjectRepository<T>(RepositoryClass: { new (): T }) {
+    return function (target: any, propertyKey: string): void {
+        const instance = new RepositoryClass();
+        Reflect.defineProperty(target, propertyKey, {
+            value: instance,
+            writable: false
+        });
+    };
+}
+
+/**
  * Controlador para operações relacionadas aos perfis.
  */
 export class ProfileController {
-    private profileRepository: ProfileRepository;
-
-    /**
-     * Instancia o ProfileRepository.
-     */
-    constructor() {
-        this.profileRepository = new ProfileRepository();
-    }
+    @InjectRepository(ProfileRepository)
+    private profileRepository!: ProfileRepository;
 
     /**
      * Cria um novo perfil de aluno associado a um usuário existente.
