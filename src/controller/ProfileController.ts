@@ -1,18 +1,13 @@
 import { Request, Response } from 'express';
+import { InjectRepository } from '../repositories/InjectRepository';
 import { ProfileRepository } from '../repositories/ProfileRepository';
 
 /**
  * Controlador para operações relacionadas aos perfis.
  */
 export class ProfileController {
-    private profileRepository: ProfileRepository;
-
-    /**
-     * Instancia o ProfileRepository.
-     */
-    constructor() {
-        this.profileRepository = new ProfileRepository();
-    }
+    @InjectRepository(ProfileRepository)
+    private profileRepository!: ProfileRepository;
 
     /**
      * Cria um novo perfil de aluno associado a um usuário existente.

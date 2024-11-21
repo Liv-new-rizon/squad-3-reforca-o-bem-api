@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { InjectRepository } from '../repositories/InjectRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { hashPassword } from '../library/bcrypt';
 import { CustomError } from '../interfaces/CustomError';
@@ -9,14 +10,8 @@ import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
  * Este controlador fornece métodos para criar um novo usuário e para buscar os dados do usuário logado.
  */
 export class UserController {
-    private userRepository: UserRepository;
-
-    /**
-     * Cria uma instância de `UserController` e inicializa o repositório de usuários.
-     */
-    constructor() {
-        this.userRepository = new UserRepository();
-    }
+    @InjectRepository(UserRepository)
+    private userRepository!: UserRepository;
 
     /**
      * Cria um novo usuário.
