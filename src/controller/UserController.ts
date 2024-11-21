@@ -1,21 +1,9 @@
 import { Request, Response } from 'express';
+import { InjectRepository } from '../repositories/InjectRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { hashPassword } from '../library/bcrypt';
 import { CustomError } from '../interfaces/CustomError';
 import { JwtPayloadCustom } from '../interfaces/JwtPayloadCustom';
-
-/**
- * Decorator para injetar dinamicamente uma instância de repositório.
- */
-function InjectRepository<T>(RepositoryClass: { new (): T }) {
-    return function (target: any, propertyKey: string): void {
-        const instance = new RepositoryClass();
-        Reflect.defineProperty(target, propertyKey, {
-            value: instance,
-            writable: false
-        });
-    };
-}
 
 /**
  * Controlador para operações relacionadas aos usuários.

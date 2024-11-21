@@ -1,18 +1,6 @@
 import { Request, Response } from 'express';
+import { InjectRepository } from '../repositories/InjectRepository';
 import { ProfileRepository } from '../repositories/ProfileRepository';
-
-/**
- * Decorator para injetar dinamicamente uma instância de repositório.
- */
-function InjectRepository<T>(RepositoryClass: { new (): T }) {
-    return function (target: any, propertyKey: string): void {
-        const instance = new RepositoryClass();
-        Reflect.defineProperty(target, propertyKey, {
-            value: instance,
-            writable: false
-        });
-    };
-}
 
 /**
  * Controlador para operações relacionadas aos perfis.
